@@ -1,4 +1,4 @@
-FROM alpine:3.4
+FROM openjdk:8-jre-alpine
 
 ENV PORT=8080
 ENV M2_HOME=/usr/lib/mvn
@@ -8,9 +8,7 @@ ENV PATH $PATH:$M2_HOME:$M2
 WORKDIR /app
 COPY . .
 
-RUN apk --update upgrade && \
-    # install Maven, JRE, and JDK
-    apk add curl openjdk8-jre openjdk8 && \
+RUN apk add --no-cache curl openjdk8="$JAVA_ALPINE_VERSION" && \
     curl http://mirrors.sonic.net/apache/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz | tar -zx && \
     mv apache-maven-3.3.9 /usr/lib/mvn && \
     # build the application into a single JAR, including dependencies
